@@ -7,6 +7,9 @@
     <meta name="viewport" content="initial-scale=1.0">
     <title>Document</title>
     <style>
+        body {
+            background-color: black;
+        }
         #canvas1 {
             position: absolute;
             top: 50%;

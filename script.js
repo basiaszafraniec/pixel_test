@@ -1,8 +1,8 @@
 window.addEventListener('load', () => {
-    const canvas1 = document.getElementById('canvas1');
-    const ctx = canvas1.getContext('2d');
-    const canvas_width = canvas1.width = window.innerWidth;
-    const canvas_height = canvas1.height = window.innerHeight;
+    const canvas = document.getElementById('canvas1');
+    const ctx = canvas.getContext('2d');
+    const canvas_width = canvas.width = window.innerWidth;
+    const canvas_height = canvas.height = window.innerHeight;
 
     class Particle {
         constructor(effect, x, y, color) {
@@ -22,9 +22,7 @@ window.addEventListener('load', () => {
             this.distance = 0;
             this.force = 0;
             this.angle = 0;
-
         }
-
         draw(context) {
             context.fillStyle = this.color;
             context.fillRect(this.x, this.y, this.size, this.size)
@@ -32,15 +30,14 @@ window.addEventListener('load', () => {
         update() {
             this.distX = this.effect.mouse.x - this.x;
             this.distY = this.effect.mouse.y - this.y;
-            this.distance = Math.sqrt(this.distX ** 2 + this.distY ** 2);
+            this.distance = (this.distX ** 2 + this.distY ** 2);
             this.force = -this.effect.mouse.radius / this.distance;
 
             if (this.distance < this.effect.mouse.radius) {
-                this.angle = Math.atan2(this.distY,this.distX);
+                this.angle = Math.atan2(this.distY, this.distX);
                 this.speedX += this.force * Math.cos(this.angle);
                 this.speedY += this.force * Math.sin(this.angle);
             }
-
             this.x += (this.speedX *= this.friction) + (this.originX - this.x) * this.ease;
             this.y += (this.speedY *= this.friction) + (this.originY - this.y) * this.ease;
         }
@@ -56,7 +53,7 @@ window.addEventListener('load', () => {
             this.imageY = this.height / 2 - this.image.height / 2;
             this.gap = 3;
             this.mouse = {
-                radius: 100,
+                radius: 10000,
                 x: undefined,
                 y: undefined
             }
@@ -66,7 +63,7 @@ window.addEventListener('load', () => {
             })
         }
         init(context) {
-            context.drawImage(this.image, this.imageX, this.imageY)
+            context.drawImage(this.image, this.imageX, this.imageY, this.image.width, this.image.height)
             const pixels = context.getImageData(0, 0, canvas_width, canvas_height).data;
             for (let y = 0; y < this.height; y += this.gap) {
                 for (let x = 0; x < this.width; x += this.gap) {
@@ -82,25 +79,23 @@ window.addEventListener('load', () => {
                 }
             }
         }
-
         draw(context) {
             this.particlesArray.forEach(particle => particle.draw(context))
         }
-
         update() {
             this.particlesArray.forEach(particle => particle.update())
         }
     }
 
-    const effect1 = new Effect(canvas_width, canvas_height);
-    effect1.init(ctx);
+    const effect = new Effect(canvas_width, canvas_height);
+    effect.init(ctx);
 
 
     animate();
     function animate() {
         ctx.clearRect(0, 0, canvas_width, canvas_height);
-        effect1.draw(ctx);
-        effect1.update();
+        effect.draw(ctx);
+        effect.update();
         requestAnimationFrame(animate);
     }
 })
