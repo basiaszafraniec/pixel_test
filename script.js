@@ -4,6 +4,53 @@ window.addEventListener('load', () => {
     const canvas_width = canvas.width = window.innerWidth;
     const canvas_height = canvas.height = window.innerHeight;
 
+    class Sprite {
+        constructor() {
+            this.x = canvas_width / 2 - 5;
+            this.y = 100;
+            this.width = 10;
+            this.height = 10;
+            this.keys = [];
+            this.speedX = 0;
+            this.speedY = 0;
+            this.acceleration = 1.1;
+            this.friction = 0.9;
+            this.moving = false;
+            this.radius = 10000;
+            document.addEventListener('keydown', e => {
+                this.keys[e.key] = true;
+                // if (this.x > 0 && this.x < canvas_width && this.y > 0 &&
+                // this.y < canvas_height)
+                this.moving = true;
+                // console.log(this.keys);
+                // this.move();
+            })
+            document.addEventListener('keyup', e => {
+                delete this.keys[e.key];
+                this.moving = false;
+                // console.log(this.keys);
+                // this.move();
+            })
+        }
+
+        draw(context) {
+            context.fillStyle = 'white';
+            context.fillRect(this.x, this.y, this.width, this.height);
+        }
+        move() {
+            if (this.keys['ArrowUp']) this.speedY = -5;
+            if (this.keys['ArrowDown']) this.speedY = 5;
+            if (this.keys['ArrowLeft']) this.speedX = -5;
+            if (this.keys['ArrowRight']) this.speedX = 5;
+
+            if (this.x > 0 && this.x < canvas_width && this.y > 0 && this.y < canvas_height) {
+                this.x += this.speedX;
+                this.y += this.speedY;
+            }
+
+        }
+    }
+
     class Particle {
         constructor(effect, x, y, color) {
             this.effect = effect;
@@ -90,12 +137,15 @@ window.addEventListener('load', () => {
     const effect = new Effect(canvas_width, canvas_height);
     effect.init(ctx);
 
+    const sprite = new Sprite();
 
     animate();
     function animate() {
         ctx.clearRect(0, 0, canvas_width, canvas_height);
         effect.draw(ctx);
         effect.update();
+        sprite.draw(ctx);
+        if (sprite.moving) sprite.move();
         requestAnimationFrame(animate);
     }
 })
