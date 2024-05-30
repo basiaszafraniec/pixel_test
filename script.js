@@ -30,7 +30,8 @@ window.addEventListener('load', () => {
         update() {
             this.distX = this.effect.mouse.x - this.x;
             this.distY = this.effect.mouse.y - this.y;
-            this.distance = Math.sqrt(this.distX ** 2 + this.distY ** 2);
+            this.distance = (this.distX ** 2 + this.distY ** 2);
+            
             this.force = -this.effect.mouse.radius / this.distance;
 
             if (this.distance < this.effect.mouse.radius) {
@@ -51,9 +52,9 @@ window.addEventListener('load', () => {
             this.image = document.getElementById('angler');
             this.imageX = this.width / 2 - this.image.width / 2;
             this.imageY = this.height / 2 - this.image.height / 2;
-            this.gap = 3;
+            this.gap = 3; 
             this.mouse = {
-                radius: 100,
+                radius: 10000,
                 x: undefined,
                 y: undefined
             }
